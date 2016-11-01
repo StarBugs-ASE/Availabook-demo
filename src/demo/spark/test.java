@@ -36,7 +36,7 @@ public class test {
 
         get("/hello", (rq, rs) -> new ModelAndView(map, "hello"), new JadeTemplateEngine());
 
-        get("/SignUp", (rq, rs) -> new ModelAndView(map, "SignUp"), new JadeTemplateEngine());
+        get("/SignUp", (rq, rs) -> new ModelAndView(map, "SignUp(2)"), new JadeTemplateEngine());
 
         post("/CreateUser", (rq, rs) -> {
             QueryParamsMap body = rq.queryMap();
