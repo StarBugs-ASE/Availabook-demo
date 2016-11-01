@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e859e8a1-0ce3-4b3e-84a3-0d1f096be1f1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/demo/spark/Operation.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/demo/spark/SQLiteJDBC2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/demo/spark/test.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/templates/SignUp(2).jade" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/templates/hello.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/templates/hello2.jade" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/demo/spark/Operation.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/demo/spark/SQLiteJDBC2.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/demo/spark/test.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Spark-Demo/templates/SignUp.jade" afterPath="$PROJECT_DIR$/out/production/Spark-Demo/templates/SignUp.jade" />
-    </list>
+    <list default="true" id="e859e8a1-0ce3-4b3e-84a3-0d1f096be1f1" name="Default" comment="" />
     <ignored path="Spark-Demo.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
