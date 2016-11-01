@@ -25,60 +25,75 @@ public class test {
 
 
         Map<String, String> map = new HashMap<>();
-        map.put("message", "Hello x!");
+        map.put("message", "Hello!");
 
+        SQLiteJDBC2 sqlitemethod2 = new SQLiteJDBC2();
 
-        SQLiteJDBC sqlitemethod = new SQLiteJDBC();
-        String passwd = sqlitemethod.PasswdQuery();
-        System.out.print(passwd);
-
-
-
-
-
-
-      //分割线
         User user = new User("no","no","no");
+
         Availatime availatime = new Availatime("no","no","no");
         // The hello.jade template file is in the resources/templates directory
 
         get("/hello", (rq, rs) -> new ModelAndView(map, "hello"), new JadeTemplateEngine());
 
+        get("/SignUp", (rq, rs) -> new ModelAndView(map, "SignUp"), new JadeTemplateEngine());
+
+        post("/CreateUser", (rq, rs) -> {
+            QueryParamsMap body = rq.queryMap();
+            String name3 = body.get("name").value();
+            String passwd3 = body.get("password").value();
+            String email3 = body.get("email").value();
+            System.out.println(name3);
+            System.out.println(passwd3);
+            System.out.println(email3);
+            user.setUser(name3,passwd3,email3);
+            System.out.println(user.getName()+" "+ user.getPasswd()+" "+user.getEmail());
+            SQLiteJDBC2 sqliteSignUp = new SQLiteJDBC2();
+            sqliteSignUp.SignUp(name3,passwd3,email3);
+
+            rs.redirect("/hello");
+            return null;
+        });
+
 
         post("/hp", (rq, rs) -> {
             QueryParamsMap body = rq.queryMap();
             String email2 = body.get("email").value();
-            System.out.println("sdjisdf"+email2);
+            System.out.println(email2);
             String name2 = body.get("username").value();
             String passwd2 = body.get("password").value();
-            System.out.println("sdjisdf"+name2);
-            System.out.println("sdjisdf"+passwd2);
-
-           System.out.println(email2);
+            System.out.println(name2);
+            System.out.println(passwd2);
+            System.out.println(email2);
             user.setUser(name2,passwd2,email2);
+
+            String passwd4 = sqlitemethod2.PasswdQuery(body.get("username").value());
+            System.out.print(passwd4);
+
+
             System.out.println(user.getName()+" "+ user.getPasswd()+" "+user.getEmail());
             rs.redirect("/addAvailatime");
-            if(user.getPasswd().equals(passwd)){
-                System.out.println(passwd);
+            if(user.getPasswd().equals(passwd4)){
+                System.out.println(passwd4);
 
                 System.out.println("right");
             }
             else{
-                System.out.println(passwd);
+                System.out.println(passwd4);
                 System.out.println(user.getPasswd());
-              System.out.println("wrong");
+                System.out.println("wrong");
             }
             return  null;
         });
 
-   //     before("/user/*", (req, res) -> {
-     //
-      //  });
 
         before("/addAvailatime", (rq, rs) -> {
+            String name = user.getName();
+            String passwd = sqlitemethod2.PasswdQuery(name);
             if(!user.getPasswd().equals(passwd)){
                 rs.redirect("/hello");
             }
+
         });
 
         get("/addAvailatime",(rq, rs) -> new ModelAndView(map, "addAvailatime"), new JadeTemplateEngine());

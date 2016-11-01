@@ -25,6 +25,7 @@ public class User {
         this.email = email;
     }
 
+
     public void setAvailatime(Availatime availatime){
         this.availatime = availatime;
     }

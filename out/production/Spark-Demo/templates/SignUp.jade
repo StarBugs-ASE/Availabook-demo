@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+  head
+    title SignUp
+  body
+    h1 Please Sign Up here.
+    form(method="post", action = "/CreateUser")
+        input(type="text", name="name")
+        input(type="password", name="password")
+        input(type="text", name="email")
+        input(type="submit", value="OK")
