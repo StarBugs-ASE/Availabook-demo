@@ -10,7 +10,7 @@ public class SQLiteJDBC
         Statement stmt = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:test2.db");
+            c = DriverManager.getConnection("jdbc:sqlite:data.db");
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
@@ -36,7 +36,7 @@ public class SQLiteJDBC
         Statement stmt = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:test2.db");
+            c = DriverManager.getConnection("jdbc:sqlite:data.db");
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
@@ -61,7 +61,7 @@ public class SQLiteJDBC
         ResultSet rs = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:test2.db");
+            c = DriverManager.getConnection("jdbc:sqlite:data.db");
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
