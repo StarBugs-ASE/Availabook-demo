@@ -2,9 +2,6 @@ package demo.spark;
 
 import static spark.Spark.*;
 
-import com.google.gson.Gson;
-import org.eclipse.jetty.server.session.JDBCSessionManager;
-import org.omg.CORBA.Request;
 import org.tmatesoft.sqljet.core.SqlJetException;
 
 import spark.ModelAndView;
@@ -12,13 +9,11 @@ import spark.QueryParamsMap;
 import spark.template.jade.JadeTemplateEngine;
 import java.sql.*;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
-public class test {
+public class Main {
 
     public static void main(String[] args) throws SqlJetException, SQLException {
         port(5050);
@@ -27,7 +22,7 @@ public class test {
         Map<String, String> map = new HashMap<>();
         map.put("message", "Hello!");
 
-        SQLiteJDBC2 sqlitemethod2 = new SQLiteJDBC2();
+        SQLiteJDBC sqlitemethod2 = new SQLiteJDBC();
 
         User user = new User("no","no","no");
 
@@ -36,7 +31,7 @@ public class test {
 
         get("/hello", (rq, rs) -> new ModelAndView(map, "hello"), new JadeTemplateEngine());
 
-        get("/SignUp", (rq, rs) -> new ModelAndView(map, "SignUp(2)"), new JadeTemplateEngine());
+        get("/SignUp", (rq, rs) -> new ModelAndView(map, "SignUp"), new JadeTemplateEngine());
 
         post("/CreateUser", (rq, rs) -> {
             QueryParamsMap body = rq.queryMap();
@@ -48,7 +43,7 @@ public class test {
             System.out.println(email3);
             user.setUser(name3,passwd3,email3);
             System.out.println(user.getName()+" "+ user.getPasswd()+" "+user.getEmail());
-            SQLiteJDBC2 sqliteSignUp = new SQLiteJDBC2();
+            SQLiteJDBC sqliteSignUp = new SQLiteJDBC();
             sqliteSignUp.SignUp(name3,passwd3,email3);
 
             rs.redirect("/hello");

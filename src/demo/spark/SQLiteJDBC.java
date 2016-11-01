@@ -2,7 +2,7 @@ package demo.spark;
 import java.sql.*;
 
 
-public class SQLiteJDBC2
+public class SQLiteJDBC
 {
     public static void main( String args[] )
     {
