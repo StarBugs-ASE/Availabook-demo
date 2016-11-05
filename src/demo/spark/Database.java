@@ -2,9 +2,8 @@ package demo.spark;
 import java.sql.*;
 
 
-public class SQLiteJDBC
-{
-    public static void main( String args[] )
+public class Database{
+   /* public static void main( String args[] )
     {
         Connection c = null;
         Statement stmt = null;
@@ -28,15 +27,26 @@ public class SQLiteJDBC
             System.exit(0);
         }
         System.out.println("Table created successfully");
-    }
+    }*/
+    public Connection c = null;
 
-    public static void SignUp(String name, String passwd, String email) {
-
-        Connection c = null;
-        Statement stmt = null;
+    public void openDatabase(){
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:data.db");
+        }catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("opened database successfully");
+    }
+
+
+    public void signUp(Connection c, String name, String passwd, String email) {
+
+
+        Statement stmt = null;
+        try {
+
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
@@ -46,22 +56,68 @@ public class SQLiteJDBC
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
         }
         System.out.println("Records created successfully");
     }
 
+    public void addFriend(Connection c, int UserID1, int UserID2){
+        Statement stmt = null;
+        try {
 
-    public String PasswdQuery(String name) throws SQLException {
-        Connection c = null;
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO FRIENDSHIP (UserID1,UserID2) " +
+                    "VALUES ('"+UserID1+"','"+UserID2+"');";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.commit();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("Records created successfully");
+    }
+
+    public int IDQuery(Connection c, String name) throws SQLException {
+
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:data.db");
+
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+
+            PreparedStatement st = c.prepareStatement("SELECT ID FROM User where name=?");
+
+            st.setString(1, name);
+
+            rs = st.executeQuery();
+            System.out.println(rs.getInt("ID"));
+            c.commit();
+            return rs.getInt("ID");
+
+        }catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("Operation done successfully");
+        return 0; //0 means that we can't find the user in database
+
+        }
+
+
+
+
+    public String passwdQuery(Connection c, String name) throws SQLException {
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
@@ -81,10 +137,8 @@ public class SQLiteJDBC
 
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
         }
         System.out.println("Operation done successfully");
-        c.close();
         return null;
 
     }

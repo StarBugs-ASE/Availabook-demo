@@ -1,6 +1,7 @@
 package demo.spark;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public class User {
     private String passwd;
     private String email;
     private Availatime availatime;
-   // private List<String> friendList;
+
 
     public User(String name, String passwd, String email){
         this.name = name;
@@ -24,6 +25,7 @@ public class User {
         this.passwd = passwd;
         this.email = email;
     }
+
 
 
     public void setAvailatime(Availatime availatime){
@@ -47,6 +49,7 @@ public class User {
     public String getEmail() {
         return email;
     }
+
 
   //  public List<String> getFriendList() {return friendList;}
 }
