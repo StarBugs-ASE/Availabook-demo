@@ -62,10 +62,12 @@ public class Main {
                 System.out.println("LoginUser " + key);
             } //output login users
             String passwdInDB = sqlitemethod2.passwdQuery(c,body.get("username").value());
+            System.out.println("passwdInDB " + passwdInDB);
 
             rs.redirect("/addAvailatime");
             String encryptedInputPasswd = sqlitemethod2.encryptedPasswd(loginInputPassword);
             user.setUser(loginInputName, encryptedInputPasswd, loginInputEmail);
+            System.out.println("encryptedInputPasswd " + encryptedInputPasswd);
             if (encryptedInputPasswd.equals(passwdInDB)) {
                 System.out.println(passwdInDB);
 
