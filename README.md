@@ -1,6 +1,6 @@
 # Availabook-demo
 
-COMS W4156 Advanced Software Engineering Project
+COMS W4156 Advanced Software Engineering
 
 Team StarBugs
 Xun Xue xx2241
