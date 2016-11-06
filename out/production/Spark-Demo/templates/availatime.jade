@@ -4,10 +4,25 @@ html(lang="en")
     title Test
   body
     h1 Please indicate your available time.
-    h2 Start time     End time     Tendency
     form(method="post", action="/new")
-            input(type="date", name="date")
-            input(type="time", name="start")
-            input(type="time", name="end")
-            input(type="text", name="tendency")
-            input(type="submit", value="OK")
+        i
+          b Date:
+        br
+        input(type='date', name='Date')
+        br
+        br
+        i
+          b Time:
+        br
+        input(type='time', name='Start Time')
+        | &nbsp to &nbsp
+        input(type='time', name='End Time')
+        br
+        br
+        i
+          b Tendency:
+        br
+        input(type='text', name='Tendency')
+        br
+        br
+        input(type='submit', value='Done')
