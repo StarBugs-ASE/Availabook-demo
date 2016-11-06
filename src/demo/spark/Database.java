@@ -1,5 +1,6 @@
 package demo.spark;
 import java.sql.*;
+import java.util.ArrayList;
 
 
 public class Database{
@@ -48,11 +49,30 @@ public class Database{
         try {
 
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO USER (NAME,PASSWORD,EMAIL) " +
                     "VALUES ( '" + name + "','" + passwd + "','" + email + "');";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.commit();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("Records created successfully");
+    }
+
+    public void addAvailatime(Connection c, String date, String start, String end, String tendency, String userName) {
+
+
+        Statement stmt = null;
+        try {
+
+            c.setAutoCommit(false);
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO AVAILATIME (date,startTime,endTime,tendency,userName) " +
+                    "VALUES ( '" + date + "','" + start + "','" + end + "','"+tendency+"','"+userName+"');";
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
@@ -67,7 +87,6 @@ public class Database{
         try {
 
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO FRIENDSHIP (UserID1,UserID2) " +
@@ -88,7 +107,6 @@ public class Database{
         try {
 
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
 
@@ -104,13 +122,10 @@ public class Database{
         }catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
-        System.out.println("Operation done successfully");
+        System.out.println("no such ID");
         return 0; //0 means that we can't find the user in database
 
         }
-
-
-
 
     public String passwdQuery(Connection c, String name) throws SQLException {
 
@@ -119,7 +134,6 @@ public class Database{
         try {
 
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
 
@@ -138,8 +152,48 @@ public class Database{
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        System.out.println("Operation done successfully");
+        System.out.println("passwordQuery failed");
         return null;
-
     }
+    public ArrayList<Availatime> availaTimeQuery(Connection c) throws SQLException {
+        Statement stmt = null;
+        try {
+            c.setAutoCommit(false);
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM AVAILATIME;");
+            ArrayList<Availatime> availatimeList = new ArrayList<>();
+            while (rs.next()) {
+                Availatime availatime = new Availatime(rs.getString("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getString("tendency"), rs.getString("userName"));
+                availatimeList.add(availatime);
+            }
+            rs.close();
+            stmt.close();
+            return availatimeList;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("AvailatimeQuery failed");
+        return null;
+    }
+    public ArrayList<Friendship> friendshipQuery(Connection c) throws SQLException{
+        Statement stmt = null;
+        try{
+            c.setAutoCommit(false);
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM FRIENDSHIP;");
+            ArrayList<Friendship> friendshipList = new ArrayList<>();
+            while(rs.next()){
+                Friendship friendship = new Friendship(rs.getInt("UserID1"),rs.getInt("UserID2"));
+                friendshipList.add(friendship);
+            }
+            rs.close();
+            stmt.close();
+            return friendshipList;
+        } catch (Exception e){
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        System.out.println("FriendshipQuery failed");
+        return null;
+    }
+
 }

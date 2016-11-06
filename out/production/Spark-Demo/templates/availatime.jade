@@ -6,7 +6,8 @@ html(lang="en")
     h1 Please indicate your available time.
     h2 Start time     End time     Tendency
     form(method="post", action="/new")
-            input(type="text", name="start")
-            input(type="text", name="end")
+            input(type="date", name="date")
+            input(type="time", name="start")
+            input(type="time", name="end")
             input(type="text", name="tendency")
             input(type="submit", value="OK")

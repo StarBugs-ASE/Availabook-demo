@@ -8,6 +8,7 @@ import spark.QueryParamsMap;
 import spark.template.jade.JadeTemplateEngine;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,8 @@ public class Main {
 
         User user = new User("no", "no", "no");
 
-        Availatime availatime = new Availatime("no", "no", "no");
+
+
         // The hello.jade template file is in the resources/templates directory
 
         get("/hello", (rq, rs) -> new ModelAndView(map, "hello"), new JadeTemplateEngine());
@@ -95,10 +97,32 @@ public class Main {
         get("/availatime", (rq, rs) -> new ModelAndView(map, "availatime"), new JadeTemplateEngine());
 
         post("/new", (rq, rs) -> {
-            String[] body = rq.body().split("&");
-            System.out.println(body[1]);
-            availatime.setAvailatime(body[0], body[1], body[2]);
-            map.put("message2", body[0] + body[1] + body[2]);
+            QueryParamsMap body = rq.queryMap();
+            String date = body.get("date").value();
+            String start = body.get("start").value();
+            String end = body.get("end").value();
+            String tendency = body.get("tendency").value();
+            sqlitemethod2.addAvailatime(c, date, start, end, tendency,user.getName());
+
+            ArrayList<Availatime> availatimeList = sqlitemethod2.availaTimeQuery(c);
+            map.put("message2","availatimeList"+"\n");
+
+            ArrayList<Friendship> friendshipList = sqlitemethod2.friendshipQuery(c);
+
+            for(int i=0; i<availatimeList.size();i++){
+                Availatime availatime = availatimeList.get(i);
+                int userID1 = sqlitemethod2.IDQuery(c, user.getName());
+                int userID2 = sqlitemethod2.IDQuery(c, availatime.getUserName());
+                boolean isFriend = false;
+                for(int j=0; j<friendshipList.size();j++){
+                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1,userID2);
+                }
+                if(isFriend) {
+                    String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n";
+                    map.put("message2", newAvailatime);
+                }
+                System.out.println(availatime.getUserName()+": " + availatime.getDate()+" "+availatime.getStartTime()+" "+availatime.getEndTime()+" "+availatime.getTendency()+"\n");
+            }
             return map.get("message2");
         });
 
