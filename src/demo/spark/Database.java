@@ -1,6 +1,9 @@
 package demo.spark;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.security.MessageDigest;
+
 
 
 public class Database{
@@ -29,6 +32,8 @@ public class Database{
         }
         System.out.println("Table created successfully");
     }*/
+
+
     public Connection c = null;
 
     public void openDatabase(){
@@ -42,6 +47,34 @@ public class Database{
     }
 
 
+    public String encryptedPasswd(String password){
+        String generatedPassword = null;
+
+        // Create MessageDigest instance for MD5
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+
+        //Add password bytes to digest
+        md.update(password.getBytes());
+        //Get the hash's bytes
+        byte[] bytes = md.digest();
+        //This bytes[] has bytes in decimal format;
+        //Convert it to hexadecimal format
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i< bytes.length ;i++)
+        {
+            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        //Get complete hashed password in hex format
+        generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+
+
+    }
     public void signUp(Connection c, String name, String passwd, String email) {
 
 
@@ -52,7 +85,7 @@ public class Database{
 
             stmt = c.createStatement();
             String sql = "INSERT INTO USER (NAME,PASSWORD,EMAIL) " +
-                    "VALUES ( '" + name + "','" + passwd + "','" + email + "');";
+                    "VALUES ( '" + name + "','" + encryptedPasswd(passwd) + "','" + email + "');";
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
