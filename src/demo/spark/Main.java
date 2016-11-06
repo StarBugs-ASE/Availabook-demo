@@ -8,6 +8,7 @@ import spark.QueryParamsMap;
 import spark.template.jade.JadeTemplateEngine;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ public class Main {
         Database sqlitemethod2 = new Database();
         sqlitemethod2.openDatabase();
         Connection c = sqlitemethod2.c;
+
+        HashMap<String, User> usermap = new HashMap<>();
 
         User user = new User("no", "no", "no");
 
@@ -54,19 +57,14 @@ public class Main {
         post("/hp", (rq, rs) -> {
             QueryParamsMap body = rq.queryMap();
             String email2 = body.get("email").value();
-            System.out.println(email2);
             String name2 = body.get("username").value();
             String passwd2 = body.get("password").value();
-            System.out.println(name2);
-            System.out.println(passwd2);
-            System.out.println(email2);
             user.setUser(name2, passwd2, email2);
-
+            usermap.put(user.getName(),user);
+            for(String key : usermap.keySet()) {
+                System.out.println("LoginUser " + key);
+            } //output login users
             String passwd4 = sqlitemethod2.passwdQuery(c,body.get("username").value());
-            System.out.print(passwd4);
-
-
-            System.out.println(user.getName() + " " + user.getPasswd() + " " + user.getEmail());
             rs.redirect("/addAvailatime");
             if (user.getPasswd().equals(passwd4)) {
                 System.out.println(passwd4);
