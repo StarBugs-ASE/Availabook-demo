@@ -27,9 +27,12 @@ public class Main {
 
         User user = new User("no", "no", "no");
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> f429614dc891dd65073519b722e61b18cd434ead
         // The hello.jade template file is in the resources/templates directory
 
         get("/login", (rq, rs) -> new ModelAndView(new HashMap(), "login"), new JadeTemplateEngine());
@@ -38,6 +41,7 @@ public class Main {
 
         post("/CreateUser", (rq, rs) -> {
             QueryParamsMap body = rq.queryMap();
+<<<<<<< HEAD
             String name3 = body.get("name").value();
             String passwd3 = body.get("password").value();
             String email3 = body.get("email").value();
@@ -49,6 +53,16 @@ public class Main {
             sqlitemethod2.signUp(c, name3, passwd3, email3);
 
             rs.redirect("/login");
+=======
+            String signUpInputName = body.get("name").value();
+            String signUpInputPassword = body.get("password").value();
+            String signUpInputEmail = body.get("email").value();
+            System.out.println(signUpInputName);
+            System.out.println(signUpInputPassword);
+            System.out.println(signUpInputEmail);
+            sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
+            rs.redirect("/hello");
+>>>>>>> f429614dc891dd65073519b722e61b18cd434ead
             return null;
         });
 
@@ -56,23 +70,35 @@ public class Main {
         post("/hp", (rq, rs) -> {
 
             QueryParamsMap body = rq.queryMap();
-            String email2 = body.get("email").value();
-            String name2 = body.get("username").value();
-            String passwd2 = body.get("password").value();
-            user.setUser(name2, passwd2, email2);
+            String loginInputEmail = body.get("email").value();
+            String loginInputName = body.get("username").value();
+            String loginInputPassword = body.get("password").value();
+
             usermap.put(user.getName(),user);
             for(String key : usermap.keySet()) {
                 System.out.println("LoginUser " + key);
             } //output login users
+<<<<<<< HEAD
             String passwd4 = sqlitemethod2.passwdQuery(c,body.get("username").value());
             rs.redirect("/userHome");
             if (user.getPasswd().equals(passwd4)) {
                 System.out.println(passwd4);
+=======
+            String passwdInDB = sqlitemethod2.passwdQuery(c,body.get("username").value());
+            System.out.println("passwdInDB " + passwdInDB);
+
+            rs.redirect("/addAvailatime");
+            String encryptedInputPasswd = sqlitemethod2.encryptedPasswd(loginInputPassword);
+            user.setUser(loginInputName, encryptedInputPasswd, loginInputEmail);
+            System.out.println("encryptedInputPasswd " + encryptedInputPasswd);
+            if (encryptedInputPasswd.equals(passwdInDB)) {
+                System.out.println(passwdInDB);
+>>>>>>> f429614dc891dd65073519b722e61b18cd434ead
 
                 System.out.println("right");
             } else {
-                System.out.println(passwd4);
-                System.out.println(user.getPasswd());
+                System.out.println(passwdInDB);
+                System.out.println(encryptedInputPasswd);
                 System.out.println("wrong");
             }
             return null;

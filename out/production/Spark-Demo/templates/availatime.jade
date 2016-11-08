@@ -1,9 +1,21 @@
 doctype html
 html(lang="en")
-  head
-    title Test
+head
+  style.
+    body {
+    background-color: powderblue;
+    }
+    h1 {
+    color: white;
+    }
+    form {
+    color: white;
+    font-family: verdana;
+    font-size: 20px;
+    }
   body
     h1 Please indicate your available time.
+<<<<<<< HEAD
     h2 Start time     End time     Tendency
     form(method="post", action="/userHome")
             input(type="date", name="date")
@@ -11,3 +23,28 @@ html(lang="en")
             input(type="time", name="end")
             input(type="text", name="tendency")
             input(type="submit", value="OK")
+=======
+    form(method="post", action="/new")
+        br
+        i
+          b Date:
+        br
+        input(type='date', name='Date')
+        br
+        br
+        i
+          b Time:
+        br
+        input(type='time', name='Start Time')
+        | &nbsp to &nbsp
+        input(type='time', name='End Time')
+        br
+        br
+        i
+          b Tendency:
+        br
+        input(type='text', name='Tendency')
+        br
+        br
+        input(type='submit', value='Done')
+>>>>>>> f429614dc891dd65073519b722e61b18cd434ead
