@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by xx on 10/12/16.
- */
+
 public class User {
     private String name;
     private String passwd;
@@ -18,7 +16,7 @@ public class User {
         this.name = name;
         this.passwd = passwd;
         this.email = email;
-      //  this.friendList = new ArrayList<String>();
+        //  this.friendList = new ArrayList<String>();
     }
     public void setUser(String name, String passwd, String email){
         this.name = name;
@@ -35,7 +33,7 @@ public class User {
         this.availatime = null;
     }
 
-  //  public void addFriend(String friendName){
+    //  public void addFriend(String friendName){
 
     //}
 
@@ -50,5 +48,5 @@ public class User {
     }
 
 
-  //  public List<String> getFriendList() {return friendList;}
+    //  public List<String> getFriendList() {return friendList;}
 }

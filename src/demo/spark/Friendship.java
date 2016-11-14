@@ -1,8 +1,6 @@
 package demo.spark;
 
-/**
- * Created by xx on 11/6/16.
- */
+
 public class Friendship {
     private int userID1;
     private int userID2;

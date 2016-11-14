@@ -3,9 +3,7 @@ package demo.spark;
 import java.sql.Date;
 import java.sql.Time;
 
-/**
- * Created by xx on 10/19/16.
- */
+
 public class Availatime {
     private String date;
     private String startTime;

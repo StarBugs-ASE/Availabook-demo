@@ -1,6 +1,7 @@
 package demo.spark;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.*;
 import java.util.ArrayList;
 import java.security.MessageDigest;
 
@@ -55,19 +56,19 @@ public class Database{
         try {
             md = MessageDigest.getInstance("MD5");
 
-        //Add password bytes to digest
-        md.update(password.getBytes());
-        //Get the hash's bytes
-        byte[] bytes = md.digest();
-        //This bytes[] has bytes in decimal format;
-        //Convert it to hexadecimal format
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i< bytes.length ;i++)
-        {
-            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        //Get complete hashed password in hex format
-        generatedPassword = sb.toString();
+            //Add password bytes to digest
+            md.update(password.getBytes());
+            //Get the hash's bytes
+            byte[] bytes = md.digest();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -75,24 +76,44 @@ public class Database{
 
 
     }
-    public void signUp(Connection c, String name, String passwd, String email) {
+
+
+    public boolean isValidEmailAddress(String email) {
+        String ePattern =
+                "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])" +
+                        "|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
+    public boolean signUp(Connection c, String name, String passwd, String email) {
 
 
         Statement stmt = null;
-        try {
+        if (isValidEmailAddress(email)) {
+            try {
 
-            c.setAutoCommit(false);
+                c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            String sql = "INSERT INTO USER (NAME,PASSWORD,EMAIL) " +
-                    "VALUES ( '" + name + "','" + encryptedPasswd(passwd) + "','" + email + "');";
-            stmt.executeUpdate(sql);
-            stmt.close();
-            c.commit();
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                stmt = c.createStatement();
+
+                String sql = "INSERT INTO USER (NAME,PASSWORD,EMAIL) " +
+                        "VALUES ( '" + name + "','" + encryptedPasswd(passwd) + "','" + email + "');";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                c.commit();
+
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            }
+            System.out.println("Records created successfully");
+            return true;
         }
-        System.out.println("Records created successfully");
+        else {
+            System.out.println("Wrong Email Address");
+            return false;
+        }
     }
 
     public void addAvailatime(Connection c, String date, String start, String end, String tendency, String userName) {
@@ -158,7 +179,7 @@ public class Database{
         System.out.println("no such ID");
         return 0; //0 means that we can't find the user in database
 
-        }
+    }
 
     public String passwdQuery(Connection c, String name) throws SQLException {
 

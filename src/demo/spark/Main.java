@@ -27,23 +27,30 @@ public class Main {
 
         User user = new User("no", "no", "no");
 
-        // The hello.jade template file is in the resources/templates directory
-
         get("/login", (rq, rs) -> new ModelAndView(new HashMap(), "login"), new JadeTemplateEngine());
 
         get("/SignUp", (rq, rs) -> new ModelAndView(new HashMap(), "SignUp"), new JadeTemplateEngine());
 
         post("/CreateUser", (rq, rs) -> {
+
+            HashMap<String, String> emailmap = new HashMap<>();
             QueryParamsMap body = rq.queryMap();
+
             String signUpInputName = body.get("name").value();
             String signUpInputPassword = body.get("password").value();
             String signUpInputEmail = body.get("email").value();
             System.out.println(signUpInputName);
             System.out.println(signUpInputPassword);
             System.out.println(signUpInputEmail);
-            sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
-            rs.redirect("/login");
 
+            boolean signUp = sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
+            if (signUp){
+                rs.redirect("/login");
+            }
+            else {
+                emailmap.put("message3", "Your email is invalid.");
+                rs.redirect("/SignUp");
+            }
             return null;
         });
 
@@ -55,12 +62,12 @@ public class Main {
             String loginInputName = body.get("username").value();
             String loginInputPassword = body.get("password").value();
 
-            usermap.put(user.getName(),user);
-            for(String key : usermap.keySet()) {
+            usermap.put(user.getName(), user);
+            for (String key : usermap.keySet()) {
                 System.out.println("LoginUser " + key);
             } //output login users
 
-            String passwdInDB = sqlitemethod2.passwdQuery(c,body.get("username").value());
+            String passwdInDB = sqlitemethod2.passwdQuery(c, body.get("username").value());
             System.out.println("passwdInDB " + passwdInDB);
 
             rs.redirect("/userHome");
@@ -82,7 +89,7 @@ public class Main {
 
         before("/userHome", (rq, rs) -> {
             String name = user.getName();
-            String passwd = sqlitemethod2.passwdQuery(c,name);
+            String passwd = sqlitemethod2.passwdQuery(c, name);
             if (!user.getPasswd().equals(passwd)) {
                 rs.redirect("/login");
             }
@@ -90,60 +97,66 @@ public class Main {
         });
 
         get("/userHome", (rq, rs) -> {
-            HashMap<String,String> map= new HashMap<>();
+            HashMap<String, String> map = new HashMap<>();
             ArrayList<Availatime> availatimeList = sqlitemethod2.availaTimeQuery(c);
-            map.put("message2","availatimeList"+"\n");
+            map.put("message2", "availatimeList" + "\n");
 
             ArrayList<Friendship> friendshipList = sqlitemethod2.friendshipQuery(c);
 
-            for(int i=0; i<availatimeList.size();i++){
+            for (int i = 0; i < availatimeList.size(); i++) {
                 Availatime availatime = availatimeList.get(i);
                 int userID1 = sqlitemethod2.IDQuery(c, user.getName());
                 int userID2 = sqlitemethod2.IDQuery(c, availatime.getUserName());
                 boolean isFriend = false;
-                for(int j=0; j<friendshipList.size();j++){
-                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1,userID2);
+                for (int j = 0; j < friendshipList.size(); j++) {
+                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1, userID2);
                 }
-                if(isFriend) {
-                    String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n";
+                if (isFriend) {
+                    String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate()
+                            + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " "
+                            + availatime.getTendency() + "\n";
                     map.put("message2", newAvailatime);
                 }
-                System.out.println(availatime.getUserName()+": " + availatime.getDate()+" "+availatime.getStartTime()+" "+availatime.getEndTime()+" "+availatime.getTendency()+"\n");
+                System.out.println(availatime.getUserName() + ": " + availatime.getDate() + " "
+                        + availatime.getStartTime() + " " + availatime.getEndTime() + " "
+                        + availatime.getTendency() + "\n");
             }
             return new ModelAndView(map, "userHome");
         }, new JadeTemplateEngine());
 
         get("/friend", (rq, rs) -> new ModelAndView(new HashMap<>(), "friend"), new JadeTemplateEngine());
 
-        get("/availatime", (rq, rs) -> new ModelAndView(new HashMap<>(), "availatime"), new JadeTemplateEngine());
+        get("/addAvailatime", (rq, rs) -> new ModelAndView(new HashMap<>(), "addAvailatime"), new JadeTemplateEngine());
+
+        get("/addFriend", (rq, rs) -> new ModelAndView(new HashMap<>(), "addFriend"), new JadeTemplateEngine());
 
         post("/userHome", (rq, rs) -> {
-            HashMap<String,String> map= new HashMap<>();
+            HashMap<String, String> map = new HashMap<>();
             QueryParamsMap body = rq.queryMap();
-            String date = body.get("date").value();
-            String start = body.get("start").value();
-            String end = body.get("end").value();
-            String tendency = body.get("tendency").value();
-            sqlitemethod2.addAvailatime(c, date, start, end, tendency,user.getName());
+            String date = body.get("Date").value();
+            String start = body.get("Start Time").value();
+            String end = body.get("End Time").value();
+            String tendency = body.get("Tendency").value();
+            sqlitemethod2.addAvailatime(c, date, start, end, tendency, user.getName());
 
             ArrayList<Availatime> availatimeList = sqlitemethod2.availaTimeQuery(c);
-            map.put("message2","availatimeList"+"\n");
+            map.put("message2", "availatimeList" + "\n");
 
             ArrayList<Friendship> friendshipList = sqlitemethod2.friendshipQuery(c);
 
-            for(int i=0; i<availatimeList.size();i++){
+            for (int i = 0; i < availatimeList.size(); i++) {
                 Availatime availatime = availatimeList.get(i);
                 int userID1 = sqlitemethod2.IDQuery(c, user.getName());
                 int userID2 = sqlitemethod2.IDQuery(c, availatime.getUserName());
                 boolean isFriend = false;
-                for(int j=0; j<friendshipList.size();j++){
-                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1,userID2);
+                for (int j = 0; j < friendshipList.size(); j++) {
+                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1, userID2);
                 }
-                if(isFriend) {
+                if (isFriend) {
                     String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n";
                     map.put("message2", newAvailatime);
                 }
-                System.out.println(availatime.getUserName()+": " + availatime.getDate()+" "+availatime.getStartTime()+" "+availatime.getEndTime()+" "+availatime.getTendency()+"\n");
+                System.out.println(availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n");
             }
             return new ModelAndView(map, "userHome");
         }, new JadeTemplateEngine());
@@ -154,12 +167,18 @@ public class Main {
             String friendName = body.get("name").value();
             int UserID1 = sqlitemethod2.IDQuery(c, user.getName());
             int UserID2 = sqlitemethod2.IDQuery(c, friendName);
-            if (UserID1!=UserID2 && UserID1!=0 && UserID2 !=0) {
+            if (UserID1 != UserID2 && UserID1 != 0 && UserID2 != 0) {
                 sqlitemethod2.addFriend(c, UserID1, UserID2);
-                map.put("message","you have successfully added a friend");
-            }
-            else map.put("message","sorry, we don't have that user");
+                map.put("message", friendName + " is ur friend now!");
+            } else map.put("message", "sorry, ur friend " + friendName + " hasn't joined availabook. Invite him/her!");
             return new ModelAndView(map, "addFriendOrNot");
-        },new JadeTemplateEngine());
+        }, new JadeTemplateEngine());
+
+        get("/logOut", (rq, rs) -> {
+            HashMap<String, String> map = new HashMap<>();
+            user.setUser("null", "null", "null");
+            return new ModelAndView(map, "logOut");
+        }, new JadeTemplateEngine());
+
     }
 }
