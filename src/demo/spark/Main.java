@@ -137,26 +137,33 @@ public class Main {
             String start = body.get("Start Time").value();
             String end = body.get("End Time").value();
             String tendency = body.get("Tendency").value();
-            sqlitemethod2.addAvailatime(c, date, start, end, tendency, user.getName());
+            Availatime tempAvailatime = new Availatime(date,start,end,tendency,user.getName());
+            if(!tempAvailatime.isValidAvailatime()){
+                System.out.println("invalid avaialtime");
+                rs.redirect("/addAvailatime");
+            }
+            else {
+                sqlitemethod2.addAvailatime(c, date, start, end, tendency, user.getName());
 
-            ArrayList<Availatime> availatimeList = sqlitemethod2.availaTimeQuery(c);
-            map.put("message2", "availatimeList" + "\n");
+                ArrayList<Availatime> availatimeList = sqlitemethod2.availaTimeQuery(c);
+                map.put("message2", "availatimeList" + "\n");
 
-            ArrayList<Friendship> friendshipList = sqlitemethod2.friendshipQuery(c);
+                ArrayList<Friendship> friendshipList = sqlitemethod2.friendshipQuery(c);
 
-            for (int i = 0; i < availatimeList.size(); i++) {
-                Availatime availatime = availatimeList.get(i);
-                int userID1 = sqlitemethod2.IDQuery(c, user.getName());
-                int userID2 = sqlitemethod2.IDQuery(c, availatime.getUserName());
-                boolean isFriend = false;
-                for (int j = 0; j < friendshipList.size(); j++) {
-                    isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1, userID2);
+                for (int i = 0; i < availatimeList.size(); i++) {
+                    Availatime availatime = availatimeList.get(i);
+                    int userID1 = sqlitemethod2.IDQuery(c, user.getName());
+                    int userID2 = sqlitemethod2.IDQuery(c, availatime.getUserName());
+                    boolean isFriend = false;
+                    for (int j = 0; j < friendshipList.size(); j++) {
+                        isFriend = isFriend || friendshipList.get(j).isFriendOrNot(userID1, userID2);
+                    }
+                    if (isFriend) {
+                        String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n";
+                        map.put("message2", newAvailatime);
+                    }
+                    System.out.println(availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n");
                 }
-                if (isFriend) {
-                    String newAvailatime = map.get("message2") + availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n";
-                    map.put("message2", newAvailatime);
-                }
-                System.out.println(availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n");
             }
             return new ModelAndView(map, "userHome");
         }, new JadeTemplateEngine());
