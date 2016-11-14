@@ -46,13 +46,15 @@ public class Main {
             boolean signUp = sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
             if (signUp){
                 rs.redirect("/login");
+                return null;
             }
             else {
                 emailmap.put("message3", "Your email is invalid.");
-                rs.redirect("/SignUp");
+                return new ModelAndView(emailmap, "SignUp");
+
             }
-            return null;
-        });
+
+        }, new JadeTemplateEngine());
 
 
         post("/hp", (rq, rs) -> {
