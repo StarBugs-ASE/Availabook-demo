@@ -1,7 +1,14 @@
 package demo.spark;
 
-import java.sql.Date;
+import de.neuland.jade4j.lexer.token.ElseIf;
+
+
 import java.sql.Time;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 
 public class Availatime {
@@ -29,7 +36,7 @@ public class Availatime {
         this.tendency = tendency;
         this.userName = userName;
     }
-    public void setAvailatime(String date, String startTime, String endTime, String tendency,String userName) {
+    public void setAvailatime(String date, String startTime, String endTime, String tendency, String userName) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -37,9 +44,42 @@ public class Availatime {
         this.userName = userName;
     }
     public boolean isValidAvailatime(){
-        if(this.getStartTime().compareTo(this.getEndTime())>=0){
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        Date time = new Date();
+        System.out.println(dateFormat.format(date));
+        System.out.println(timeFormat.format(time));
+        if(this.getStartTime().compareTo(this.getEndTime()) >= 0
+                || this.getDate().compareTo(String.valueOf(dateFormat.format(date))) < 0
+                || (this.getDate().compareTo(dateFormat.format(date)) == 0
+                    && this.getStartTime().compareTo(timeFormat.format(time)) < 0)
+        )
+        {
+            System.out.println(this.getDate().compareTo(timeFormat.format(date)));
             return false;
+
         }
-        else return true;
+        else {
+            System.out.println("Success");
+            return true;
+        }
+    }
+
+    public static void main(String[] args) { //just for testing comparison function
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        //get current date time with Date()
+        Date date = new Date();
+        Date time = new Date();
+        System.out.println(dateFormat.format(date));
+        System.out.println(timeFormat.format(time));
+
+        //get current date time with Calendar()
+        Calendar cal = Calendar.getInstance();
+        //System.out.println(dateFormat.format(cal.getTime()));
+
     }
 }

@@ -87,11 +87,20 @@ public class Database{
         return m.matches();
     }
 
-    public boolean signUp(Connection c, String name, String passwd, String email) {
+
+    public boolean isValidName(String name) {
+        String ePattern =
+                "[a-z|A-Z]+";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(name);
+        return m.matches();
+    }
+
+    public String signUp(Connection c, String name, String passwd, String email) {
 
 
         Statement stmt = null;
-        if (isValidEmailAddress(email)) {
+        if (isValidEmailAddress(email)&& isValidName(name)) {
             try {
 
                 c.setAutoCommit(false);
@@ -108,12 +117,16 @@ public class Database{
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
             }
             System.out.println("Records created successfully");
-            return true;
+            return "Success";
         }
-        else {
+        else if (!isValidEmailAddress(email)){
             System.out.println("Wrong Email Address");
-            return false;
-        }
+            return "Email";
+
+        } else if (!isValidName(name)){
+            System.out.println("Wrong Name Input");
+            return "Name";
+        } else return "fail";
     }
 
     public void addAvailatime(Connection c, String date, String start, String end, String tendency, String userName) {
@@ -217,7 +230,8 @@ public class Database{
             ResultSet rs = stmt.executeQuery("SELECT * FROM AVAILATIME;");
             ArrayList<Availatime> availatimeList = new ArrayList<>();
             while (rs.next()) {
-                Availatime availatime = new Availatime(rs.getString("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getString("tendency"), rs.getString("userName"));
+                Availatime availatime = new Availatime(rs.getString("date"), rs.getString("startTime"),
+                        rs.getString("endTime"), rs.getString("tendency"), rs.getString("userName"));
                 availatimeList.add(availatime);
             }
             rs.close();

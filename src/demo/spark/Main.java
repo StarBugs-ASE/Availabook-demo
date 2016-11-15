@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.sql.Time;
 
 public class Main {
 
@@ -43,17 +43,23 @@ public class Main {
             System.out.println(signUpInputPassword);
             System.out.println(signUpInputEmail);
 
-            boolean signUp = sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
-            if (signUp){
+            String signUp = sqlitemethod2.signUp(c, signUpInputName, signUpInputPassword, signUpInputEmail);
+            if (signUp.equals("Success")){
                 rs.redirect("/login");
                 return null;
             }
-            else {
+            else if (signUp.equals("Email")){
                 emailmap.put("message3", "Your email is invalid.");
                 return new ModelAndView(emailmap, "SignUp");
 
             }
-
+            else if (signUp.equals("Name")){
+                emailmap.put("message3", "Your name is invalid.");
+                return new ModelAndView(emailmap, "SignUp");
+            }
+            else {
+                return new ModelAndView(emailmap, "SignUp");
+            }
         }, new JadeTemplateEngine());
 
 
@@ -136,14 +142,19 @@ public class Main {
             HashMap<String, String> map = new HashMap<>();
             QueryParamsMap body = rq.queryMap();
             String date = body.get("Date").value();
-            String start = body.get("Start Time").value();
-            String end = body.get("End Time").value();
+            String start = body.get("StartTime").value();
+            String end = body.get("EndTime").value();
             String tendency = body.get("Tendency").value();
             Availatime tempAvailatime = new Availatime(date,start,end,tendency,user.getName());
+            System.out.println(date);
+            System.out.println(start);
+            System.out.println(end);
             if(!tempAvailatime.isValidAvailatime()){
-                System.out.println("invalid avaialtime");
-                rs.redirect("/addAvailatime");
+                System.out.println("invalid available timetime");
+                map.put("message", "Your input of available time is invalid.");
+                return new ModelAndView(map, "addAvailatime");
             }
+
             else {
                 sqlitemethod2.addAvailatime(c, date, start, end, tendency, user.getName());
 
@@ -165,7 +176,9 @@ public class Main {
                         map.put("message2", newAvailatime);
                     }
                     System.out.println(availatime.getUserName() + ": " + availatime.getDate() + " " + availatime.getStartTime() + " " + availatime.getEndTime() + " " + availatime.getTendency() + "\n");
+
                 }
+                System.out.println("success!!!!");
             }
             return new ModelAndView(map, "userHome");
         }, new JadeTemplateEngine());
