@@ -29,11 +29,17 @@ public class Availatime {
         this.tendency = tendency;
         this.userName = userName;
     }
-    public void setAvailatime(String date, String startTime, String endTime, String tendency,String userName){
+    public void setAvailatime(String date, String startTime, String endTime, String tendency,String userName) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.tendency = tendency;
         this.userName = userName;
+    }
+    public boolean isValidAvailatime(){
+        if(this.getStartTime().compareTo(this.getEndTime())>=0){
+            return false;
+        }
+        else return true;
     }
 }
