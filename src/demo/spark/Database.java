@@ -95,6 +95,7 @@ public class Database{
         java.util.regex.Matcher m = p.matcher(name);
         return m.matches();
     }
+    /* return true if the provided name contains only letters*/
 
 
     public boolean isValidPasswd(String passwd) {
@@ -104,6 +105,14 @@ public class Database{
         java.util.regex.Matcher m = p.matcher(passwd);
         return m.matches();
     }
+    /* returns true if the provided password
+  	- contains at least 1 digit
+  	- contains at least 1 lowercase letter
+  	- contains at least 1 uppercase letter
+  	- contains at least 1 of the special characters !@#$%^&*()_+\-=[]{};':"\|,.<>/?
+  	- is at least 6 character long
+  	- is at most 15 characters long*/
+
 
     public String signUp(Connection c, String name, String passwd, String email) {
 
