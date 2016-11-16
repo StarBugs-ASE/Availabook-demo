@@ -96,11 +96,20 @@ public class Database{
         return m.matches();
     }
 
+
+    public boolean isValidPasswd(String passwd) {
+        String ePattern =
+                "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};’:”\\\\|,.<>\\/?]).{6,15}$" ;
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(passwd);
+        return m.matches();
+    }
+
     public String signUp(Connection c, String name, String passwd, String email) {
 
 
         Statement stmt = null;
-        if (isValidEmailAddress(email)&& isValidName(name)) {
+        if ((isValidEmailAddress(email))&& (isValidName(name))&&(isValidPasswd(passwd))) {
             try {
 
                 c.setAutoCommit(false);
@@ -120,18 +129,41 @@ public class Database{
             return "Success";
         }
         else {
-            if ((!isValidName(name))&&(!isValidEmailAddress(email))){
-                System.out.println("Wrong Name&Email Input");
-                return "Name&Email";
+            if (!isValidName(name)){
+                if (!isValidEmailAddress(email)){
+                    if (!isValidPasswd(passwd)){
+                        System.out.println("Wrong Name&Email&Password Input");
+                        return "Name&Email&Password";
+                        }
+                    else {
+                        System.out.println("Wrong Name&Email Input");
+                        return "Name&Email";
+                    }
+                }
+                else if (!isValidPasswd(passwd)){
+                    System.out.println("Wrong Name&Password Input");
+                    return "Name&Password";
+                }
+                else {
+                    System.out.println("Wrong Name Input");
+                    return "Name";
+                }
             }
-            else if (!isValidEmailAddress(email)) {
-                System.out.println("Wrong Email Address");
-                return "Email";
+            else if (!isValidEmailAddress(email)){
+                if (!isValidPasswd(passwd)){
+                    System.out.println("Wrong Email&Password Input");
+                    return "Email&Password";
+                }
+                else {
+                    System.out.println("Wrong Email Input");
+                    return "Email&Password";
+                }
             }
-            else if (!isValidName(name)) {
-                System.out.println("Wrong Name Input");
-                return "Name";
+            else if (!isValidPasswd(passwd)){
+                System.out.println("Wrong Password Input");
+                return "Password";
             }
+
             else return "fail";
         }
     }
