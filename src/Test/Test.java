@@ -1,6 +1,10 @@
 package Test;
 
 import demo.spark.Database;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Test {
     public static void main(String[] args) {
@@ -12,6 +16,12 @@ public class Test {
         System.out.println();
         System.out.println("Email validation: ");
         emailtest();
+        System.out.println();
+        System.out.println("Time validation: ");
+        timetest();
+        System.out.println();
+        System.out.println("Date validation: ");
+        datetest();
         System.out.println();
     }
 
@@ -52,14 +62,41 @@ public class Test {
         }
     }
     public static void timetest() {
-        Database test = new Database();
-        String email[] = new String[4];
-        email[0] = "Name@mail.com";//valid email
-        email[1] = "Namemail.com";//invalid(not contain '@' character)
-        email[2] = "Name@mailcom";//invalid(not contain '.')
-        email[3] = "Name@mail.";//invalid('.' is not followed by letters)
-        for (String emailcheck : email) {
-            System.out.println(emailcheck + " validation is " + test.isValidEmailAddress(emailcheck));
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        Date time = new Date();
+        String Starttime[] = new String[3];
+            Starttime[0] = "10:00";
+            Starttime[1] = "13:00";
+            Starttime[2] = timeFormat.format(time);
+        String Endtime[] = new String[3];
+            Endtime[0] = "11:00";
+            Endtime[1] = "12:00";
+            Endtime[2] = timeFormat.format(time);
+        int i=0;
+        while(i<2){
+            if(Starttime[i].compareTo(Endtime[i])>=0)
+            {
+                System.out.println("Starttime " + Starttime[i] + " cannot be equal to or later than Endtime " + Endtime[i]);
+            }
+            if(Endtime[i].compareTo(timeFormat.format(time))<0){
+                System.out.println("Endtime " + Endtime[i] + " cannot be equal to or earlier than current time " + timeFormat.format(time));
+            }
+            else System.out.println("Validation passed");
+            i++;
+        }
+    }
+    public static void datetest() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String date1[] = new String[3];
+            date1[0] = "2000-01-01";
+            date1[1] = dateFormat.format(date);
+            date1[2] = "2100-01-01";
+        for(String datecheck : date1){
+            if(datecheck.compareTo(dateFormat.format(date)) < 0){
+                System.out.println(datecheck +" validation is false");
+            }
+            else System.out.println(datecheck +" validation is true");
         }
     }
 }

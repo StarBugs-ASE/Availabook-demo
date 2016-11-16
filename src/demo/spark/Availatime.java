@@ -44,7 +44,6 @@ public class Availatime {
         this.userName = userName;
     }
     public boolean isValidAvailatime(){
-
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
