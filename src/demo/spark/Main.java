@@ -48,13 +48,16 @@ public class Main {
                 rs.redirect("/login");
                 return null;
             }
-            else if (signUp.equals("Email")){
-                emailmap.put("message3", "Your email is invalid.");
+            else if (signUp.equals("Name&Email")) {
+                emailmap.put("message3", "Your name and email are invalid.");
                 return new ModelAndView(emailmap, "SignUp");
-
             }
             else if (signUp.equals("Name")){
                 emailmap.put("message3", "Your name is invalid.");
+                return new ModelAndView(emailmap, "SignUp");
+            }
+            else if (signUp.equals("Email")){
+                emailmap.put("message3", "Your email is invalid.");
                 return new ModelAndView(emailmap, "SignUp");
             }
             else {

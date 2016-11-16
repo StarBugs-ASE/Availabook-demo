@@ -119,14 +119,21 @@ public class Database{
             System.out.println("Records created successfully");
             return "Success";
         }
-        else if (!isValidEmailAddress(email)){
-            System.out.println("Wrong Email Address");
-            return "Email";
-
-        } else if (!isValidName(name)){
-            System.out.println("Wrong Name Input");
-            return "Name";
-        } else return "fail";
+        else {
+            if ((!isValidName(name))&&(!isValidEmailAddress(email))){
+                System.out.println("Wrong Name&Email Input");
+                return "Name&Email";
+            }
+            else if (!isValidEmailAddress(email)) {
+                System.out.println("Wrong Email Address");
+                return "Email";
+            }
+            else if (!isValidName(name)) {
+                System.out.println("Wrong Name Input");
+                return "Name";
+            }
+            else return "fail";
+        }
     }
 
     public void addAvailatime(Connection c, String date, String start, String end, String tendency, String userName) {
