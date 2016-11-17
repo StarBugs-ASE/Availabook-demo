@@ -18,7 +18,7 @@ COMS W4156 Advanced Software Engineering
 1. Creating buildscript for the project.
 1. Creating user session for the log in and log out function.
 2. Creating friend group module.
-3. Modifying the display of availble time list on the home page.
+3. Modifying the display of available time list on the home page.
 
 ## Questions to find out
 1. How to create buildscript in maven.
