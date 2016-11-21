@@ -8,10 +8,10 @@ COMS W4156 Advanced Software Engineering
 3. Use [Jade template language](https://www.npmjs.com/package/jade) to write HTML.
 
 ## Completed Development
-1. Created User Sign Up and Log In module.
+1. Created User sign up and log in module.
 2. Created User add friends module.
 3. Created User add available time module.
-4. Wrote BlackBox Test Cases for Completed Development. 
+4. Wrote blackBox test cases for completed development. 
  * Check the user input of the sign up, log in and add available time function. If the input is not correct, it will display an error message on the page.
 
 ## Current Development
